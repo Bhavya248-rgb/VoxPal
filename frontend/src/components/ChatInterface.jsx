@@ -65,7 +65,7 @@ const ChatInterface = ({ mode = 'widget' }) => {
         }]);
 
         try {
-            const response = await makeStreamRequest(`${config.apiUrl}/voice-chat/stream`, {
+            const response = await makeStreamRequest(`/voice-chat/stream`, {
                 method: 'POST',
                 body: JSON.stringify({ message: currentMessage })
             });
@@ -126,8 +126,8 @@ const ChatInterface = ({ mode = 'widget' }) => {
                                 });
 
                                 setConversationsRemaining(data.content.conversationsRemaining);
-                                console.log('Data content:', data.content);
-                                console.log('Muted or not ', isMuted);
+                                // console.log('Data content:', data.content);
+                                // console.log('Muted or not ', isMuted);
                                 // Play audio if available and not muted
                                 if (data.content.audioUrl && !isMuted) {
                                     console.log('Audio will play');

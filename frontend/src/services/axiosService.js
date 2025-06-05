@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 
-const baseURL = config.apiUrl || 'http://localhost:7000';
+const baseURL = config.apiUrl;
 
 const axiosInstance = axios.create({
     baseURL,

@@ -4,9 +4,9 @@ import storyController from '../controllers/storyController.js';
 const router = express.Router();
 
 // Story generation routes
-router.post('/generate-story', storyController.generateStory);
+router.post('/generate-story', validateToken, storyController.generateStory);
 router.post('/concept-to-story', validateToken, storyController.generateStoryFromConcept);
-// router.post('/stream-audio',validateToken, storyController.streamStoryAudio);
+router.post('/stream-audio', validateToken, storyController.streamStoryAudio);
 router.delete('/delete-audio/:filename', storyController.deleteAudio);
 
 // Story management routes

@@ -151,27 +151,27 @@ const generateStory = asyncHandler(async (req, res) => {
         // console.log('Audio generated successfully');
     }
 
-    // try {
-    //     // After successful story generation, increment the user's story count
-    //     await User.findByIdAndUpdate(
-    //         req.user._id,
-    //         { $inc: { TotalStories: 1 } },
-    //         { new: true }
-    //     );
+    try {
+        // After successful story generation, increment the user's story count
+        await User.findByIdAndUpdate(
+            req.user._id,
+            { $inc: { TotalStories: 1 } },
+            { new: true }
+        );
 
-    res.json({
-        success: true,
-        story: story,
-        wordCount: story.split(/\s+/).length,
-        ...(audioData && {
-            audioUrl: audioData.audioFile,
-            audioLength: audioData.audioLengthInSeconds
-        })
-    });
-    // } catch (error) {
-    //     res.status(500);
-    //     throw new Error('Story generation failed: ' + error.message);
-    // }
+        res.json({
+            success: true,
+            story: story,
+            wordCount: story.split(/\s+/).length,
+            ...(audioData && {
+                audioUrl: audioData.audioFile,
+                audioLength: audioData.audioLengthInSeconds
+            })
+        });
+    } catch (error) {
+        res.status(500);
+        throw new Error('Story generation failed: ' + error.message);
+    }
 });
 
 // @desc    Generate a story from concept

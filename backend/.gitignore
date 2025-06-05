@@ -1,0 +1,54 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
+
+# Build output or temp folders
+dist/
+build/
+uploads/
+temp/
+public/audio/
+coverage/
+.nyc_output/
+
+# Cache directories
+.npm
+.eslintcache
+.cache
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.sublime-*
+*.code-workspace
+
+# Debug logs
+debug/
+debug.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock

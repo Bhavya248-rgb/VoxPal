@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PremiumBanner from '../common/PremiumBanner';
+import config from '../../config';
 
 const languages = [
     { code: 'en-IN', name: 'English' },
@@ -90,7 +91,7 @@ const Translator = ({ isPremium, userId }) => {
 
         setIsTranslating(true);
         try {
-            const response = await fetch('http://localhost:7000/api/voice-assist/translate', {
+            const response = await fetch(`${config.apiUrl}/voice-assist/translate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

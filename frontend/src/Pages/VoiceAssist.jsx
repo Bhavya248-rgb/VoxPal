@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Summarizer from '../components/voice-assist/Summarizer';
 import Translator from '../components/voice-assist/Translator';
+import config from '../config';
 
 const VoiceAssist = () => {
     const [activeTab, setActiveTab] = useState('summarize');
@@ -11,7 +12,7 @@ const VoiceAssist = () => {
         // Fetch user's premium status and ID
         const checkUserStatus = async () => {
             try {
-                const response = await fetch('http://localhost:7000/api/auth/current', {
+                const response = await fetch(`${config.apiUrl}/auth/current`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }

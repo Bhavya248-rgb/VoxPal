@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useVoice } from '../../context/VoiceContext'
 import { useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 const ageGroups = [
   '3-5 years',
@@ -50,7 +51,7 @@ const UnderstandConcept = () => {
     return () => {
       // Delete audio file when component unmounts
       if (audioFileName) {
-        fetch(`http://localhost:7000/api/storyteller/delete-audio/${audioFileName}`, {
+        fetch(`${config.apiUrl}/storyteller/delete-audio/${audioFileName}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -75,7 +76,7 @@ const UnderstandConcept = () => {
     setAudioFileName('');
     
     try {
-        const response = await fetch('http://localhost:7000/api/storyteller/concept-to-story', {
+        const response = await fetch(`${config.apiUrl}/storyteller/concept-to-story`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -106,7 +107,7 @@ const UnderstandConcept = () => {
     if (!generatedStory || isPlaying) return;
 
     try {
-        const response = await fetch('http://localhost:7000/api/storyteller/stream-audio', {
+        const response = await fetch(`${config.apiUrl}/storyteller/stream-audio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +181,7 @@ const UnderstandConcept = () => {
 
     setIsSaving(true);
     try {
-      const response = await fetch('http://localhost:7000/api/storyteller/save', {
+      const response = await fetch(`${config.apiUrl}/storyteller/save`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

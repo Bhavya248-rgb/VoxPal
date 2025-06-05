@@ -6,6 +6,7 @@ import SpeechSettings, { audienceTypes, speechTypes } from '../components/voice-
 import PremiumBanner from '../components/common/PremiumBanner';
 import SaveSession from '../components/voice-coach/SaveSession';
 import { useVoice } from '../context/VoiceContext'; 
+import config from '../config';
 
 const VoiceCoach = () => {
   const { generalVoiceId } =  useVoice();
@@ -34,7 +35,7 @@ const VoiceCoach = () => {
 
   const fetchUserData = async (token) => {
     try {
-            const response = await fetch('http://localhost:7000/api/auth/current', {
+            const response = await fetch(`${config.apiUrl}/auth/current`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -50,7 +51,7 @@ const VoiceCoach = () => {
 
     const loadSavedSessions = async (token) => {
         try {
-            const response = await fetch('http://localhost:7000/api/voice/sessions', {
+            const response = await fetch(`${config.apiUrl}/voice/sessions`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -81,7 +82,7 @@ const VoiceCoach = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:7000/api/voice/save-session', {
+            const response = await fetch(`${config.apiUrl}/voice/save-session`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -218,7 +219,7 @@ const VoiceCoach = () => {
       const formData = new FormData();
             formData.append('audio', audioFile, 'speech.webm');
       
-      const response = await fetch('http://localhost:7000/api/voice/convert', {
+      const response = await fetch(`${config.apiUrl}/voice/convert`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -257,7 +258,7 @@ const VoiceCoach = () => {
         return;
       }
       console.log("Voice id from voice coach:",generalVoiceId);
-        const response = await fetch('http://localhost:7000/api/voice/generate-feedback', {
+        const response = await fetch(`${config.apiUrl}/voice/generate-feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

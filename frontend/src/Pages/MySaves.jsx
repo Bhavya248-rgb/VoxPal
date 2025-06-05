@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 const MySaves = () => {
     const [savedStories, setSavedStories] = useState([]);
@@ -18,7 +19,7 @@ const MySaves = () => {
 
     const fetchSavedStories = async () => {
         try {
-            const response = await fetch('http://localhost:7000/api/storyteller/saved', {
+            const response = await fetch(`${config.apiUrl}/storyteller/saved`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -39,7 +40,7 @@ const MySaves = () => {
 
     const fetchSavedFeedbacks = async () => {
         try {
-            const response = await fetch('http://localhost:7000/api/voice/sessions', {
+            const response = await fetch(`${config.apiUrl}/voice/sessions`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -60,7 +61,7 @@ const MySaves = () => {
         if (!window.confirm('Are you sure you want to delete this story?')) return;
 
         try {
-            const response = await fetch(`http://localhost:7000/api/storyteller/saved/${storyId}`, {
+            const response = await fetch(`${config.apiUrl}/storyteller/saved/${storyId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -81,7 +82,7 @@ const MySaves = () => {
         if (!window.confirm('Are you sure you want to delete this feedback session?')) return;
 
         try {
-            const response = await fetch(`http://localhost:7000/api/voice/sessions/${feedbackId}`, {
+            const response = await fetch(`${config.apiUrl}/voice/sessions/${feedbackId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`

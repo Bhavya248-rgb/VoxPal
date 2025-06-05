@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useVoice } from '../../context/VoiceContext';
+import config from '../../config';
 
 const CreateStory = () => {
   const { storyVoiceId } = useVoice();
@@ -70,7 +71,7 @@ const CreateStory = () => {
     setGeneratedStory(null);
 
     try {
-      const response = await fetch('http://localhost:7000/api/storyteller/generate-story', {
+      const response = await fetch(`${config.apiUrl}/storyteller/generate-story`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ const CreateStory = () => {
 
     setIsSaving(true);
     try {
-      const response = await fetch('http://localhost:7000/api/storyteller/save', {
+      const response = await fetch(`${config.apiUrl}/storyteller/save`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

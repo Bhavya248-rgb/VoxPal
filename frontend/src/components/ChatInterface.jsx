@@ -4,6 +4,7 @@ import { FaRobot, FaTimes, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ReactMarkdown from 'react-markdown';
 import axiosInstance, { makeStreamRequest } from '../services/axiosService';
+import config from '../config';
 
 const ChatInterface = ({ mode = 'widget' }) => {
     const [isOpen, setIsOpen] = useState(mode === 'fullscreen');
@@ -42,7 +43,7 @@ const ChatInterface = ({ mode = 'widget' }) => {
 
     const checkRemainingConversations = async () => {
         try {
-            const response = await axiosInstance.get('/api/voice-chat/history');
+            const response = await axiosInstance.get(`${config.apiUrl}/voice-chat/history`);
             setConversationsRemaining(response.data.conversationsRemaining);
         } catch (error) {
             console.error('Error checking remaining conversations:', error);
@@ -64,7 +65,7 @@ const ChatInterface = ({ mode = 'widget' }) => {
         }]);
 
         try {
-            const response = await makeStreamRequest('/api/voice-chat/stream', {
+            const response = await makeStreamRequest(`${config.apiUrl}/voice-chat/stream`, {
                 method: 'POST',
                 body: JSON.stringify({ message: currentMessage })
             });

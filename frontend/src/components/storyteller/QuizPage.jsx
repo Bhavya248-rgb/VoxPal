@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 const QuizPage = () => {
     const location = useLocation();
@@ -37,7 +38,7 @@ const QuizPage = () => {
 
     const generateQuiz = async () => {
         try {
-            const response = await fetch('http://localhost:7000/api/storyteller/generate-quiz', {
+            const response = await fetch(`${config.apiUrl}/storyteller/generate-quiz`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,

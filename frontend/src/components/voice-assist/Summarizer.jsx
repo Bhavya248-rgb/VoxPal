@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PremiumBanner from '../common/PremiumBanner';
 import { useVoice } from '../../context/VoiceContext';
+import config from '../../config';
 
 const Summarizer = ({ isPremium }) => {
     const [inputType, setInputType] = useState('text'); // 'text', 'url', or 'file'
@@ -47,7 +48,7 @@ const Summarizer = ({ isPremium }) => {
                     formData.append('convertToSpeech', String(convertToSpeech));
                     formData.append('voiceId', generalVoiceId);
 
-                    const response = await fetch(`http://localhost:7000/api/voice-assist/${endpoint}`, {
+                    const response = await fetch(`${config.apiUrl}/voice-assist/${endpoint}`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -67,7 +68,7 @@ const Summarizer = ({ isPremium }) => {
                     endpoint = 'summarize';
                     data = { text };
                     
-                    const textResponse = await fetch(`http://localhost:7000/api/voice-assist/${endpoint}`, {
+                    const textResponse = await fetch(`${config.apiUrl}/voice-assist/${endpoint}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

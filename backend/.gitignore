@@ -20,9 +20,6 @@ pnpm-debug.log*
 # Build output or temp folders
 dist/
 build/
-uploads/
-temp/
-public/audio/
 coverage/
 .nyc_output/
 

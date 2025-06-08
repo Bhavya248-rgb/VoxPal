@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PremiumBanner from '../common/PremiumBanner';
 import { useVoice } from '../../context/VoiceContext';
 import config from '../../config';
@@ -13,7 +13,9 @@ const Summarizer = ({ isPremium }) => {
     const [uploadedFile, setUploadedFile] = useState(null);
     const [summaryLength, setSummaryLength] = useState('medium');
     const [convertToSpeech, setConvertToSpeech] = useState(false);
-    const [audioUrl, setAudioUrl] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const audioRef = useRef(null);
     const { generalVoiceId } = useVoice();
 
     const handleInputTypeChange = (type) => {
@@ -29,7 +31,8 @@ const Summarizer = ({ isPremium }) => {
         // Clear results
         setSummary('');
         setOriginalText('');
-        setAudioUrl(null);
+        setIsPlaying(false);
+        setProgress(0);
     };
 
     const handleSummarize = async () => {
@@ -37,7 +40,7 @@ const Summarizer = ({ isPremium }) => {
         try {
             let endpoint;
             let data;
-
+            let result;
             switch(inputType) {
                 case 'file':
                     endpoint = 'summarize-file';
@@ -56,12 +59,12 @@ const Summarizer = ({ isPremium }) => {
                         body: formData
                     });
                     
-                    const result = await response.json();
+                    result = await response.json();
                     if (!response.ok) throw new Error(result.message);
                     
-                    setSummary(result.summary);
-                    setOriginalText(result.originalText);
-                    if (result.audioUrl) setAudioUrl(result.audioUrl);
+                    // setSummary(result.summary);
+                    // setOriginalText(result.originalText);
+                    // if (result.audioUrl) setAudioUrl(result.audioUrl);
                     break;
                     
                 default: // text
@@ -82,13 +85,17 @@ const Summarizer = ({ isPremium }) => {
                         })
                     });
 
-                    const textResult = await textResponse.json();
-                    if (!textResponse.ok) throw new Error(textResult.message);
+                    result = await textResponse.json();
+                    if (!textResponse.ok) throw new Error(result.message);
 
-                    setSummary(textResult.summary);
-                    if (textResult.originalText) setOriginalText(textResult.originalText);
-                    if (textResult.audioUrl) setAudioUrl(textResult.audioUrl);
+                    break;
+                    // setSummary(result.summary);
+                    // if (result.originalText) setOriginalText(result.originalText);
+                    // if (result.audioUrl) setAudioUrl(result.audioUrl);
             }
+            setSummary(result.summary);
+            if (result.originalText) setOriginalText(result.originalText);
+            // if (result.audioUrl) setAudioUrl(result.audioUrl);
         } catch (error) {
             alert(error.message);
         } finally {
@@ -115,6 +122,66 @@ const Summarizer = ({ isPremium }) => {
                 return uploadedFile !== null;
             default:
                 return text.trim() !== '';
+        }
+    };
+
+    const playAudio = async () => {
+        if (!summary || isPlaying) return;
+
+        try {
+            const response = await fetch(`${config.apiUrl}/storyteller/stream-audio`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    text: summary,
+                    voiceId: generalVoiceId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate audio');
+            }
+
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            
+            if (audioRef.current) {
+                audioRef.current.src = url;
+                audioRef.current.play();
+                setIsPlaying(true);
+            }
+
+            // Clean up the blob URL when audio ends
+            audioRef.current.onended = () => {
+                URL.revokeObjectURL(url);
+                setIsPlaying(false);
+                setProgress(0);
+            };
+        } catch (error) {
+            console.error('Error playing audio:', error);
+        }
+    };
+
+    const handlePlay = () => {
+        playAudio();
+    };
+
+    const handlePause = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            setIsPlaying(false);
+        }
+    };
+
+    const handleStop = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+            setIsPlaying(false);
+            setProgress(0);
         }
     };
 
@@ -254,16 +321,41 @@ const Summarizer = ({ isPremium }) => {
                             </p>
                         </div>
                     )}
-                </div>
-            )}
-
-            {audioUrl && (
-                <div className="border-t border-gray-200 pt-6">
-                    <h3 className="text-xl font-semibold text-purple-900 mb-4">Audio Version</h3>
-                    <audio controls className="w-full">
-                        <source src={audioUrl} type="audio/mp3" />
-                        Your browser does not support the audio element.
-                    </audio>
+                    {summary && convertToSpeech && (
+                        <div className="mt-4 space-y-2">
+                            <h4 className="font-medium">Audio Controls:</h4>
+                            <div className="flex space-x-4">
+                                <button
+                                    onClick={handlePlay}
+                                    disabled={isPlaying}
+                                    className={`px-4 py-2 rounded-lg ${
+                                        isPlaying ? 'bg-gray-300 cursor-not-allowed' : 'bg-purple-600 text-white hover:bg-purple-700'
+                                    }`}
+                                >
+                                    Play
+                                </button>
+                                <button
+                                    onClick={handlePause}
+                                    disabled={!isPlaying}
+                                    className={`px-4 py-2 rounded-lg ${
+                                        !isPlaying ? 'bg-gray-300 cursor-not-allowed' : 'bg-purple-600 text-white hover:bg-purple-700'
+                                    }`}
+                                >
+                                    Pause
+                                </button>
+                                <button
+                                    onClick={handleStop}
+                                    disabled={!isPlaying}
+                                    className={`px-4 py-2 rounded-lg ${
+                                        !isPlaying ? 'bg-gray-300 cursor-not-allowed' : 'bg-purple-600 text-white hover:bg-purple-700'
+                                    }`}
+                                >
+                                    Stop
+                                </button>
+                            </div>
+                            <audio ref={audioRef} className="hidden" />
+                        </div>
+                    )}
                 </div>
             )}
         </div>

@@ -26,15 +26,15 @@ export const summarizeText = asyncHandler(async (req, res) => {
 
     const summary = await murfService.summarizeText(text, { maxLength });
     let audioUrl = null;
-
-    if (convertToSpeech == true) {
-        audioUrl = await murfService.textToSpeech(summary, voiceId);
-    }
+// 
+    // if (convertToSpeech == true) {
+        // audioUrl = await murfService.textToSpeech(summary, voiceId);
+    // }
     
     res.status(200).json({
         success: true,
         summary,
-        audioUrl
+        // audioUrl
     });
 });
 
@@ -129,17 +129,17 @@ export const summarizeFile = asyncHandler(async (req, res) => {
         const summary = await murfService.summarizeText(extractedText, { maxLength });
         let audioUrl = null;
 
-        if (convertToSpeech) {
-            console.log('Converting summary to speech...');
-            audioUrl = await murfService.textToSpeech(summary, voiceId);
-            console.log('Speech conversion completed, audioUrl:', audioUrl);
-        }
+        // if (convertToSpeech) {
+            // console.log('Converting summary to speech...');
+            // audioUrl = await murfService.textToSpeech(summary, voiceId);
+            // console.log('Speech conversion completed, audioUrl:', audioUrl);
+        // }
         
         res.status(200).json({
             success: true,
             originalText: extractedText,
             summary,
-            audioUrl
+            // audioUrl
         });
     } catch (error) {
         // If any error occurs and the file still exists, delete it

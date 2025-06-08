@@ -90,7 +90,11 @@ Please write the story:`;
 
 // Helper function to generate speech
 async function generateSpeech(text, voiceId) {
+    let multiNativeLocale = "";
     console.log("Voice id from generateSpeech:", voiceId);
+    if(voiceId === "en-US-ronnie" || voiceId === "ta-IN-iniya"){
+        multiNativeLocale = "en-IN";
+    }
     const response = await fetch('https://api.murf.ai/v1/speech/generate', {
         method: 'POST',
         headers: {
@@ -101,6 +105,7 @@ async function generateSpeech(text, voiceId) {
             text: text,
             voice_id: voiceId,
             style: "Narration",
+            multiNativeLocale: multiNativeLocale, // Use multiNativeLocale if needed
             format: "mp3"
         })
     });
@@ -426,6 +431,11 @@ Generate the quiz:`;
 const streamStoryAudio = asyncHandler(async (req, res) => {
     const { text, voiceId } = req.body;
     console.log("Voice id from streamStoryAudio:", voiceId);
+    let multiNativeLocale = "";
+    console.log("Voice id from generateSpeech:", voiceId);
+    if(voiceId === "en-US-ronnie" || voiceId === "ta-IN-iniya"){
+        multiNativeLocale = "en-IN";
+    }
     try {
         const response = await fetch('https://api.murf.ai/v1/speech/stream', {
             method: 'POST',
@@ -436,6 +446,7 @@ const streamStoryAudio = asyncHandler(async (req, res) => {
             body: JSON.stringify({
                 text: text,
                 voice_id: voiceId,
+                multiNativeLocale: multiNativeLocale, // Use multiNativeLocale if needed
                 format: 'MP3'
             })
         });

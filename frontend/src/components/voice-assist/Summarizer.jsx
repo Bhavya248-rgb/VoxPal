@@ -16,7 +16,7 @@ const Summarizer = ({ isPremium }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const audioRef = useRef(null);
-    const { generalVoiceId } = useVoice();
+    const { storyVoiceId } = useVoice();
 
     const handleInputTypeChange = (type) => {
         if (type === 'url' && !isPremium) {
@@ -49,7 +49,7 @@ const Summarizer = ({ isPremium }) => {
                     formData.append('maxLength', summaryLength);
                     // Convert boolean to string explicitly
                     formData.append('convertToSpeech', String(convertToSpeech));
-                    formData.append('voiceId', generalVoiceId);
+                    formData.append('voiceId', storyVoiceId);
 
                     const response = await fetch(`${config.apiUrl}/voice-assist/${endpoint}`, {
                         method: 'POST',
@@ -81,7 +81,7 @@ const Summarizer = ({ isPremium }) => {
                             ...data,
                             maxLength: summaryLength,
                             convertToSpeech,
-                            voiceId: generalVoiceId
+                            voiceId: storyVoiceId
                         })
                     });
 
@@ -140,7 +140,7 @@ const Summarizer = ({ isPremium }) => {
                 },
                 body: JSON.stringify({
                     text: summary,
-                    voiceId: generalVoiceId
+                    voiceId: storyVoiceId
                 })
             });
 

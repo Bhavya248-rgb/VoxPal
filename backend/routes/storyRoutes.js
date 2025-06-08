@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/generate-story', validateToken, storyController.generateStory);
 router.post('/concept-to-story', validateToken, storyController.generateStoryFromConcept);
 router.post('/stream-audio', validateToken, storyController.streamStoryAudio);
-router.delete('/delete-audio/:filename', storyController.deleteAudio);
+// router.delete('/delete-audio/:filename', storyController.deleteAudio);
 
 // Story management routes
 router.post('/save', validateToken, storyController.saveStory);

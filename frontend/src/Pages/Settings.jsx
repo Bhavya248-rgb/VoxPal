@@ -10,7 +10,7 @@ const voiceOptions = {
       gender: 'Male',
       voice_id:"en-US-ronnie",
       style:"Narration",
-      multiNativeLocale:"en_IN",
+      multiNativeLocale:"en-IN",
       sampleAudio: '/voices/story/ronnie.wav'
     },
     {
@@ -19,7 +19,7 @@ const voiceOptions = {
       gender: 'Female',
       voice_id:"ta-IN-iniya",
       style:"Narration",
-      multiNativeLocale:"en_IN",
+      multiNativeLocale:"en-IN",
       sampleAudio: '/voices/story/iniya.wav'
     },
     {
@@ -39,7 +39,7 @@ const voiceOptions = {
         age:'Young Adult',
         voice_id:"bn-IN-abhik",
         style:"Conversational",
-        multiNativeLocale:"en_IN",
+        multiNativeLocale:"en-IN",
         sampleAudio: '/voices/abhik.wav'
       },
       {
@@ -56,7 +56,7 @@ const voiceOptions = {
         age: 'Young Adult',
         voice_id:"en-US-ronnie",
         style:"Narration",
-        multiNativeLocale:"en_IN",
+        multiNativeLocales:["en-IN","en-US"],
         sampleAudio: '/voices/ronnie.wav'
       }
     ],
@@ -75,7 +75,7 @@ const voiceOptions = {
         age: 'Middle Aged',
         voice_id:"es-ES-carla",
         style:"Narration",
-        multiNativeLocale:"en_IN",
+        multiNativeLocale:"en-IN",
         sampleAudio: '/voices/carla.wav'
       },
       {
@@ -84,7 +84,7 @@ const voiceOptions = {
         age: 'Young',
         voice_id:"ta-IN-iniya",
         style:"Narration",
-        multiNativeLocale:"en_IN",
+        multiNativeLocale:"en-IN",
         sampleAudio: '/voices/iniya.wav'
       }
     ]

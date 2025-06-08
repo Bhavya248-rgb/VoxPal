@@ -210,44 +210,57 @@ const VoiceCoach = () => {
     const handleConvertToText = async (audioUrl) => {
         if (!audioUrl) return;
 
-    const token = checkAuth();
-    if (!token) return;
+        const token = checkAuth();
+        if (!token) return;
 
-    try {
+        setIsProcessing(true);
+        try {
             const audioBlob = await fetch(audioUrl).then(r => r.blob());
             const audioFile = new Blob([audioBlob], { type: 'audio/webm' });
-      const formData = new FormData();
+            const formData = new FormData();
             formData.append('audio', audioFile, 'speech.webm');
       
-      const response = await fetch(`${config.apiUrl}/voice/convert`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
+            const response = await fetch(`${config.apiUrl}/voice/convert`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
       
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to convert speech to text');
-      }
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Failed to convert speech to text');
+            }
 
-      const data = await response.json();
+            const data = await response.json();
             if (!data.text) {
                 throw new Error('No text returned from the server');
             }
 
-      setSpeechText(data.text);
-    } catch (error) {
-      console.error('Error converting speech to text:', error);
-      alert(error.message || 'Failed to convert speech to text. Please try again.');
-    }
-  };
+            setSpeechText(data.text);
+            setUploadStatus('Speech converted to text successfully!');
+        } catch (error) {
+            console.error('Error converting speech to text:', error);
+            alert(error.message || 'Failed to convert speech to text. Please try again.');
+            setRecordedAudioUrl(null); // Clear the audio URL if conversion fails
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
   const handleGenerateFeedback = async () => {
-    if (!speechText) {
+    if (!speechText && !recordedAudioUrl) {
             alert('Please upload a file or record speech first.');
-      return;
+            return;
+        }
+
+    // If we have recordedAudioUrl but no speechText, we need to convert first
+    if (recordedAudioUrl && !speechText) {
+        await handleConvertToText(recordedAudioUrl);
+        if (!speechText) {
+            return; // If conversion failed, don't proceed
+        }
     }
 
     setIsGeneratingFeedback(true);
@@ -326,7 +339,12 @@ const VoiceCoach = () => {
                 />
                 
                 <AudioRecorder
-                    onRecordingComplete={setRecordedAudioUrl}
+                    onRecordingComplete={async (audioUrl) => {
+                        setRecordedAudioUrl(audioUrl);
+                        setSpeechText('');
+                        setFeedback(null);
+                        await handleConvertToText(audioUrl);
+                    }}
                     onConversionStart={() => {
                         setSpeechText('');
                         setFeedback(null);
@@ -334,7 +352,7 @@ const VoiceCoach = () => {
                 />
         </div>
 
-            {(speechText || recordedAudioUrl) && !isGeneratingFeedback && (
+            {((speechText || recordedAudioUrl) && !isGeneratingFeedback && !isProcessing) && (
           <div className="flex justify-center">
             <button
               onClick={handleGenerateFeedback}

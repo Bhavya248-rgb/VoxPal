@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { JSDOM } from 'jsdom';
 import mammoth from 'mammoth';
 import fs from 'fs';
 import { promisify } from 'util';

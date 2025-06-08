@@ -20,7 +20,6 @@ const Storyteller = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Fantasy Background */}
       <div 
         className="fixed inset-0 bg-cover bg-center z-0"
         style={{ 

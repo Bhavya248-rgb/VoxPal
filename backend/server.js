@@ -21,13 +21,13 @@ const app = express();
 // CORS configuration
 const corsOptions = {
     origin: process.env.NODE_ENV === 'production'
-        ? ['https://voxpal-frontend.onrender.com']  // Replace with your Render frontend URL
+        ? ['https://voxpal-frontend.onrender.com']
         : ['http://localhost:5173'],
     credentials: true,
     optionsSuccessStatus: 200
 };
 
-// app.use(cors()); // Use default CORS settings for development
+// app.use(cors());
 app.use(cors(corsOptions));
 
 const port = process.env.PORT || 7000;

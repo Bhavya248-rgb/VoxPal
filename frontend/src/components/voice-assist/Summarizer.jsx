@@ -125,6 +125,9 @@ const Summarizer = ({ isPremium }) => {
         }
     };
 
+    //streaming voice generation
+    // This function handles the audio playback for the generated summary
+    // It fetches the audio from the server and plays it using the audio element
     const playAudio = async () => {
         if (!summary || isPlaying) return;
 

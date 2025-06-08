@@ -12,20 +12,20 @@ const QuizPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [feedbackText, setFeedbackText] = useState('');
 
-    // Hide chat widget when component mounts
-    useEffect(() => {
-        const chatWidget = document.querySelector('[data-chat-widget]');
-        if (chatWidget) {
-            chatWidget.style.display = 'none';
-        }
+    //// Hide chat widget when component mounts
+    // useEffect(() => {
+        // const chatWidget = document.querySelector('[data-chat-widget]');
+        // if (chatWidget) {
+            // chatWidget.style.display = 'none';
+        // }
 
-        // Show chat widget when component unmounts
-        return () => {
-            if (chatWidget) {
-                chatWidget.style.display = 'block';
-            }
-        };
-    }, []);
+        //// Show chat widget when component unmounts
+        // return () => {
+            // if (chatWidget) {
+                // chatWidget.style.display = 'block';
+            // }
+        // };
+    // }, []);
 
     useEffect(() => {
         if (!location.state?.topic) {

@@ -91,10 +91,10 @@ const UnderstandConcept = () => {
 
         const data = await response.json();
         setGeneratedStory(data.story);
-        if (data.audioUrl) {
-            const fileName = data.audioUrl.split('/').pop();
-            setAudioFileName(fileName);
-        }
+        // if (data.audioUrl) {
+            // const fileName = data.audioUrl.split('/').pop();
+            // setAudioFileName(fileName);
+        // }
         setIsLoading(false);
 
     } catch (error) {
@@ -107,6 +107,7 @@ const UnderstandConcept = () => {
     if (!generatedStory || isPlaying) return;
 
     try {
+        console.log("Entered try block in making a call to /stream-audio endpoint");
         const response = await fetch(`${config.apiUrl}/storyteller/stream-audio`, {
             method: 'POST',
             headers: {
@@ -122,7 +123,7 @@ const UnderstandConcept = () => {
         if (!response.ok) {
             throw new Error('Failed to generate audio');
         }
-
+        console.log("Response received from /stream-audio endpoint:",response);
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
         
@@ -138,6 +139,7 @@ const UnderstandConcept = () => {
             setIsPlaying(false);
             setProgress(0);
         };
+        console.log("try ended successfully, audio is playing now");
 
     } catch (error) {
         console.error('Error playing audio:', error);

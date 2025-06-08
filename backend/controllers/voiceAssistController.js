@@ -115,7 +115,7 @@ export const summarizeFile = asyncHandler(async (req, res) => {
             throw new Error('Free users can only summarize content up to 3000 characters');
         }
 
-        // Parse convertToSpeech from form data
+        // check convertToSpeech from form data
         const convertToSpeech = req.body.convertToSpeech === 'true';
         const maxLength = req.body.maxLength || 'medium';
         const voiceId = req.body.voiceId;

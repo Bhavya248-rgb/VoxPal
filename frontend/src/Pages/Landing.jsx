@@ -122,10 +122,7 @@ export default function LandingPage() {
             <div className="flex justify-center gap-6">
               <a href="/register" className="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full hover:from-pink-600 hover:to-purple-600 transition shadow-lg">
                 Get Started
-              </a>
-              {/* <a href="#demo" className="px-8 py-4 bg-white bg-opacity-10 text-white rounded-full hover:bg-opacity-20 transition">
-                Watch Demo
-              </a> */}
+              </a>                          
             </div>
           </div>
         </div>
@@ -156,9 +153,9 @@ export default function LandingPage() {
                   <p className="text-xl text-gray-600 leading-relaxed">
                     {feature.description}
                   </p>
-                  <a href={`#learn-more-${index}`} className="inline-block text-pink-600 hover:text-pink-700 font-semibold">
-                    Learn more →
-                  </a>
+                  {/* <a href={`#learn-more-${index}`} className="inline-block text-pink-600 hover:text-pink-700 font-semibold"> */}
+                    {/* Learn more → */}
+                  {/* </a> */}
                 </div>
             </div>
           ))}

@@ -50,12 +50,11 @@ ${isConversational ? '- Include natural dialogue between characters' : ''}
 
 Please write the story:`;
 
-            // Initialize the model with the lighter version
             const model = genAI.getGenerativeModel({
                 model: "gemini-2.0-flash-lite",
                 config: {
                     temperature: 0.7,
-                    maxOutputTokens: Math.max(wordLength * 4, 1000), // Adjust token limit based on word length
+                    maxOutputTokens: Math.max(wordLength * 4, 1000),  // Adjust token limit based on word length
                 }
             });
 
@@ -139,14 +138,14 @@ const generateStory = asyncHandler(async (req, res) => {
     }
 
     // Generate the story using Gemini
-    // console.log('Generating story with Gemini...');
+    // console.log('Generating story with Gemini');
     const story = await generateStoryWithAI(plot, characters, genre, isConversational, wordLength);
     // console.log('Story generated successfully');
 
-    // Generate audio for the story if needed
+    // Generate audio for the story
     let audioData = null;
     if (process.env.MURF_API_KEY) {
-        // console.log('Generating audio for the story...');
+        // console.log('Generating audio for the story');
         audioData = await generateSpeech(story, storyVoiceId);
         // console.log('Audio generated successfully');
     }
@@ -211,36 +210,36 @@ Please write the story:`;
         const story = response.text().trim();
 
         // Generate audio using Murf streaming API
-        const murfResponse = await fetch('https://api.murf.ai/v1/speech/stream', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'api-key': process.env.MURF_API_KEY
-            },
-            body: JSON.stringify({
-                text: story,
-                voice_id: storyVoiceId,
-                format: 'MP3'
-            })
-        });
+        // const murfResponse = await fetch('https://api.murf.ai/v1/speech/stream', {
+            // method: 'POST',
+            // headers: {
+                // 'Content-Type': 'application/json',
+                // 'api-key': process.env.MURF_API_KEY
+            // },
+            // body: JSON.stringify({
+                // text: story,
+                // voice_id: storyVoiceId,
+                // format: 'MP3'
+            // })
+        // });
 
-        if (!murfResponse.ok) {
-            throw new Error('Failed to generate audio stream');
-        }
-        console.log("Murf response:", murfResponse);
-        // Create write stream for audio file
-        const fileName = `story_${Date.now()}.mp3`;
-        const filePath = `./public/audio/${fileName}`;
-        const writer = fs.createWriteStream(filePath);
+        // if (!murfResponse.ok) {
+            // throw new Error('Failed to generate audio stream');
+        // }
+        // console.log("Murf response:", murfResponse);
+        //// Create write stream for audio file
+        // const fileName = `story_${Date.now()}.mp3`;
+        // const filePath = `./public/audio/${fileName}`;
+        // const writer = fs.createWriteStream(filePath);
 
-        // Pipe the audio stream to file
-        murfResponse.body.pipe(writer);
+        //// Pipe the audio stream to file
+        // murfResponse.body.pipe(writer);
 
-        // Handle stream completion
-        await new Promise((resolve, reject) => {
-            writer.on('finish', resolve);
-            writer.on('error', reject);
-        });
+        // //Handle stream completion
+        // await new Promise((resolve, reject) => {
+            // writer.on('finish', resolve);
+            // writer.on('error', reject);
+        // });
 
         // Increment story count
         try {
@@ -257,7 +256,7 @@ Please write the story:`;
         res.json({
             success: true,
             story: story,
-            audioUrl: `/audio/${fileName}`
+            // audioUrl: `/audio/${fileName}`
         });
 
     } catch (error) {
@@ -374,7 +373,6 @@ Generate the quiz:`;
             // Remove any markdown code block indicators
             .replace(/```json\n?/g, '')
             .replace(/```\n?/g, '')
-            // Remove any leading/trailing whitespace
             .trim();
 
         // Try to find the JSON object if there's additional text
@@ -387,7 +385,6 @@ Generate the quiz:`;
         try {
             const quizData = JSON.parse(cleanedText);
 
-            // Validate the quiz data structure
             if (!quizData.questions || !Array.isArray(quizData.questions)) {
                 throw new Error('Invalid quiz format: missing questions array');
             }
@@ -428,7 +425,7 @@ Generate the quiz:`;
 // @access  Public
 const streamStoryAudio = asyncHandler(async (req, res) => {
     const { text, voiceId } = req.body;
-
+    console.log("Voice id from streamStoryAudio:", voiceId);
     try {
         const response = await fetch('https://api.murf.ai/v1/speech/stream', {
             method: 'POST',
@@ -448,11 +445,13 @@ const streamStoryAudio = asyncHandler(async (req, res) => {
             console.error('Murf API error response:', errorText);
             throw new Error('Failed to generate audio stream');
         }
+        console.log("Murf response for streaming audio");
 
         // Set appropriate headers for audio streaming
         res.setHeader('Content-Type', 'audio/mp3');
         res.setHeader('Transfer-Encoding', 'chunked');
 
+        console.log("Piping audio for in the backend /stream endpoint");
         // Pipe the audio stream directly to response
         response.body.pipe(res);
 
